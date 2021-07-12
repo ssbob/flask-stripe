@@ -2,10 +2,11 @@ import json
 import os
 
 import stripe
-from flask import Flask, request, render_template, jsonify, redirect
+from flask import Flask, request, render_template, jsonify, redirect, url_for
 
-stripe.api_key = "sk_test_51JBSdjD9g7lS7o0KGUpVOk90ZIYqh3bdGNFmKZaHHYklKraf3iZrgTuEIwzx5G5FyPEfQbvIAadgnlpOr4Khiz9z00qLiANvDO"
-endpoint_secret = 'whsec_4MtpjMyjBh9Ien0mna51Mx4wsEk7vVhl'
+stripe.api_key = os.environ['STRIPE_SECRET_KEY']
+endpoint_secret = os.environ['STRIPE_ENDPOINT_SECRET']
+
 
 app = Flask(__name__,
             static_url_path='',
@@ -69,14 +70,15 @@ def create_payment():
 
 
 # Webhook for confirmation
-@app.route('/webhook', methods=['POST'])
+@app.route("/webhooks", methods=["POST"])
 def stripe_webhook():
-    payload = request.data.decode("utf-8")
-    received_sig = request.headers.get("Stripe-Signature", None)
-
+    #print("Processing webhook...")
+    payload = request.get_data(as_text=True)
+    sig_header = request.headers.get("Stripe-Signature")
+    #print("Payload: ", payload)
     try:
         event = stripe.Webhook.construct_event(
-            payload, received_sig, endpoint_secret
+            payload, sig_header, endpoint_secret
         )
 
     except ValueError as e:
@@ -86,13 +88,12 @@ def stripe_webhook():
         # Invalid signature
         return "Invalid signature", 400
 
-    print(
-        "Received event: id={id}, type={type}".format(
-            id=event.id, type=event.type
-        )
-    )
+    # Handle the checkout.session.completed event
+    if event["type"] == "charge.succeeded":
+        print("Payment was successful.")
 
-    return redirect("/success", code=200)
+    return "Success", 200
+
 
 
 if __name__ == '__main__':
