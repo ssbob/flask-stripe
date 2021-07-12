@@ -10,5 +10,7 @@ instance/
 
 .env
 .venv
+venv/
+.idea/
 
 .DS_Store

@@ -1,36 +1,56 @@
 {% extends 'layouts/main.html' %}
 
 {% block content %}
-<div class="row justify-content-md-center">
-  <div class="col-6">
-    <div class="text-center mt-40">
-      <h1>
-        Checkout — Stripe Press
-      </h1>
-      <h5 class="text-secondary">
-        {{ title }}
-      </h5>
-      <hr class="mt-40">
-      <div class="mt-20 text-info">
-        Total due: $<span class="amount" data-amount="{{ amount }}"></span>
-      </div>
+    <head>
+        <script src="https://js.stripe.com/v3/"></script>
+        <script type="text/javascript" src="/js/client.js" defer></script>
+    </head>
+    <body>
+    <div class="row justify-content-md-center">
+        <div class="col-6">
+            <div class="text-center mt-40">
+                <h1>
+                    Checkout — Stripe Press
+                </h1>
+                <h5 class="text-secondary">
+                    {{ title }}
+                </h5>
+                <hr class="mt-40">
+                <div class="mt-20 text-info">
+                    Total due: $<span class="amount" data-amount="{{ amount }}"></span>
+                </div>
+            </div>
+            <div class="card box-shadow mt-40">
+                <div class="card-body">
+                    <form name="payment-form" id="payment-form">
+                        <div>
+                            <label for="email">Email address</label>
+                            <input type="email" class="form-control" id="email" name="email"
+                                   placeholder="you@email.com">
+                        </div>
+                        <!-- Adding in a hidden div with ID and value to allow for the JS script (client.js) to
+                             hook into it, to get the amount of the sale. -->
+                        <div hidden id="data" amount="{{ amount }}"></div>
+                        <div class="mt-20 text-center text-secondary border-placeholder" id="card-element"></div>
+                        <div class="mt-20">
+                            <button id="submit" class="btn btn-lg btn-block btn-primary">
+                                <div class="spinner hidden" id="spinner"></div>
+                                <span id="button-text">Pay $<span
+                                        class="amount"
+                                        data-amount="{{ amount }}"></span></span>
+                            </button>
+                            <p id="card-error" role="alert"></p>
+                            <p class="result-message hidden">
+                                Payment succeeded, see the result in your
+                                <a href="" target="_blank">Stripe dashboard.</a> Refresh the page to pay again.
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="card box-shadow mt-40">
-      <div class="card-body">
-        <form name="payment-form">
-          <div>
-            <label for="email">Email address</label>
-            <input type="email" class="form-control" id="email" name="email" placeholder="you@email.com">
-          </div>
-          <div class="mt-20 text-center text-secondary border-placeholder">
-            Add Stripe Element here!
-          </div>
-          <div class="mt-20">
-            <button type="submit" class="btn btn-lg btn-block btn-primary">Pay $<span class="amount" data-amount="{{ amount }}"></span></button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
+    </body>
 {% endblock %}
+
+
