@@ -41,7 +41,7 @@ fetch("/create-payment-intent", {
                 iconColor: "#fa755a"
             }
         };
-        console.log()
+        console.log("Payment Intent created...")
         var card = elements.create("card", {style: style});
         // Stripe injects an iframe into the DOM
         card.mount("#card-element");
@@ -58,6 +58,7 @@ fetch("/create-payment-intent", {
             // Complete payment when the submit button is clicked
             payWithCard(stripe, card, data.clientSecret);
         });
+        console.log("Event Listener added - complete payment when the submit button is clicked.")
     });
 
 // Calls stripe.confirmCardPayment
@@ -74,9 +75,11 @@ var payWithCard = function (stripe, card, clientSecret) {
         .then(function (result) {
             if (result.error) {
                 // Show error to your customer
+                console.log("PayWithCard: Payment failed!");
                 showError(result.error.message);
             } else {
                 // The payment succeeded!
+                console.log("PayWithCard: Payment successful!");
                 orderComplete(result.paymentIntent.id);
             }
         });
@@ -93,6 +96,7 @@ var orderComplete = function (paymentIntentId) {
             "href",
             "https://dashboard.stripe.com/test/payments/" + paymentIntentId
         );
+    console.log('Order complete...');
     document.querySelector(".result-message").classList.remove("hidden");
     document.querySelector("button").disabled = true;
 };

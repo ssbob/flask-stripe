@@ -1,4 +1,3 @@
-import json
 import os
 
 import stripe
@@ -6,7 +5,6 @@ from flask import Flask, request, render_template, jsonify, redirect, url_for
 
 stripe.api_key = os.environ['STRIPE_SECRET_KEY']
 endpoint_secret = os.environ['STRIPE_ENDPOINT_SECRET']
-
 
 app = Flask(__name__,
             static_url_path='',
@@ -60,11 +58,11 @@ def create_payment():
             amount=2300,
             currency='usd'
         )
-        # print("Intent: ", intent)
 
         return jsonify({
             'clientSecret': intent['client_secret']
         })
+
     except Exception as e:
         return jsonify(error=str(e)), 403
 
@@ -72,10 +70,10 @@ def create_payment():
 # Webhook for confirmation
 @app.route("/webhooks", methods=["POST"])
 def stripe_webhook():
-    #print("Processing webhook...")
+    # print("Processing webhook...")
     payload = request.get_data(as_text=True)
     sig_header = request.headers.get("Stripe-Signature")
-    #print("Payload: ", payload)
+    # print("Payload: ", payload)
     try:
         event = stripe.Webhook.construct_event(
             payload, sig_header, endpoint_secret
@@ -92,8 +90,7 @@ def stripe_webhook():
     if event["type"] == "charge.succeeded":
         print("Payment was successful.")
 
-    return "Success", 200
-
+    return redirect(url_for("success"), code=200)
 
 
 if __name__ == '__main__':
