@@ -18,7 +18,7 @@ success/failure to the store.
 
 ## Why did I build it the way I did?
 
-To start, I stuck with examples provided by Stripe on their Github
+To start, I stuck with examples provided by Stripe on their GitHub
 page [Stripe Samples](https://github.com/stripe-samples). Along with the various API docs, and sample explanations
 provided on their docs page, [Stripe Integration Builder](https://stripe.com/docs/payments/integration-builder). I also
 ended up finding an example of Stripe and Flask using Stripe Checkouts (the other path listed above), found
