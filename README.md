@@ -24,25 +24,30 @@ provided on their docs page, [Stripe Integration Builder](https://stripe.com/doc
 ended up finding an example of Stripe and Flask using Stripe Checkouts (the other path listed above), found
 here, [Flask Stripe Tutorial](https://testdriven.io/blog/flask-stripe-tutorial/).
 
-Some hard parts were getting the Javascript files from the Stripe Integration Builder working with the custom HTML (
-Hint: use the example HTML from the Stripe Integration Builder examples as a starting point, was very helpful). Second
-was passing data to and from the various routes in Flask without a database. Keep in mind, this is a very simple
-example, all it proves is that Stripe is processing payments, but isn't a real e-commerce page as it lacks a "cart", or
-delivery, or accounts.
+### The more difficult parts / recommendations for others
 
-If I was going to build this out a second time, I would probably end up using [Django](https://www.djangoproject.com/)
-as the web framework as it makes making an eCommerce site pretty easy. I would include a simple database, which means I
-don't have to ship data around from class/function (Flask Route) to class/function, instead I can make DB calls (perhaps
-not the most efficient performance wise, but for a simple eCommerce site, the volume would not be an issue). Also, some
-of the examples on the Stripe docs use Django instead of Flask on the custom payment and webhook process. Nothing
-against Flask, it just was something new I was learning while building this simple test, and that meant I struggled a
-bit more. While I like the idea of a custom payment flow, Stripe Checkout makes a lot of sense, as it eases the burden
-of the developer and makes Stripe do the heavy lifting. I think I would probably go that route next time.
+- Some hard parts were getting the Javascript files from the Stripe Integration Builder working with the custom HTML (
+  Hint: use the example HTML from the Stripe Integration Builder examples as a starting point, was very helpful).
+- Second was passing data to and from the various routes in Flask without a database. Keep in mind, this is a very
+  simple example, all it proves is that Stripe is processing payments, but isn't a real e-commerce page as it lacks a "
+  cart", or delivery, or accounts.
+
+### What would I do differently?
+
+- If I was going to build this out a second time, I would probably end up using [Django](https://www.djangoproject.com/)
+  as the web framework as it makes making an eCommerce site pretty easy. Some of the examples on the Stripe docs use
+  Django instead of Flask on the custom payment and webhook process. Nothing against Flask, it just was something new I
+  was learning while building this simple test, and that meant I struggled a bit more.
+- I would include a simple database (SQLite, Postgres), which means I don't have to ship data around from
+  class/function (Flask Route) to class/function, instead I can make DB calls. Perhaps not the most efficient
+  performance wise, but for a simple eCommerce site, the volume would not be an issue.
+- While I like the idea of a custom payment flow, Stripe Checkout makes a lot of sense, as it eases the burden of the
+  developer and makes Stripe do the heavy lifting. I think I would probably go that route next time.
 
 ## What doesn't work?
 
 Currently, when you click on buy on the checkout page, assuming you enter valid CC details, the purchase goes through (
-confirmed through Stripe webhook and on payment dashboard), but for some unknown reason (it will likely be obvious to
+confirmed through Stripe webhook and on payment dashboard). For some unknown reason (it will likely be obvious to
 someone) it will not redirect to the `/success` page/route. I have tried via JS, Flask/Python. At this point, it's a
 minor thing, but is bugging me. So, consider this a big TODO item.
 
@@ -70,7 +75,7 @@ Then run the application locally:
 flask run
 ```
 
-If you want to be able to verify payment locally (i.e., not having to login to your payment dashboard), then make sure
+If you want to be able to verify payment locally (i.e., not having to log in to your payment dashboard), then make sure
 to install the stripe [CLI](https://stripe.com/docs/stripe-cli). Then in a console window launch the following CLI
 command:
 
@@ -78,9 +83,9 @@ command:
 stripe listen --forward-to localhost:5000/webhooks
 ```
 
-NOTE: if you change this repository and the route for webhooks is changed, then substitute that value above.
+NOTE: if you change this repository, and the route for webhooks is changed, then substitute that value above.
 
-Further, if you want to confirm payment, and the your webhook is working correctly, you can run the following command (
+Further, if you want to confirm payment, and the webhook is working correctly, you can run the following command (
 again, part of the CLI) from another terminal:
 
 ```
