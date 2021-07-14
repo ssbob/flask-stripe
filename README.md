@@ -59,10 +59,16 @@ here, [Flask Stripe Tutorial](https://testdriven.io/blog/flask-stripe-tutorial/)
 
 ## What doesn't work?
 
-Currently, when you click on buy on the checkout page, assuming you enter valid CC details, the purchase goes through (
-confirmed through Stripe webhook and on payment dashboard). For some unknown reason (it will likely be obvious to
-someone) it will not redirect to the `/success` page/route. I have tried via JS, Flask/Python. At this point, it's a
-minor thing, but is bugging me. So, consider this a big TODO item.
+This is a "sort of" a doesn't work thing, it's working, but I am sure I am going about it all wrong (aka the "hacky"
+approach).
+
+One of the issues I encountered was trying to redirect the user to the `success` template via the `webhook` route.
+However, it was not working, and after numerous attempts, I looked elsewhere. What I found was in `client.js`, I can
+force the redirect using the `document.location.href` function, which forces the browser window to a different URL. With
+this mechanism, I pass the `paymentIntentId` value from the card confirmation function (also in `client.js`). Within
+that Flask route, I use the Stripe API to retrieve the `PaymentIntent` object, and parse out
+the `charge confirmation ID`, and amount. Then render that in the `success` template. I am sure there is a more elegant
+solution to this, but it works consistently, so I am calling this a win!
 
 ## How do I use this?
 

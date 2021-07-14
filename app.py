@@ -87,19 +87,32 @@ def stripe_webhook():
         # Invalid signature
         return "Invalid signature", 400
 
-    if event["type"] == "payment_intent.succeeded":
-        payment_intent = event["data"]["object"]
-
-        # Some confirmations and needed values to be sent to the /success page (if it would work!)
-        charge_id = payment_intent.charges.data[0].id
-        charge_amount = payment_intent.charges.data[0].amount
-        print("Confirmation information -- confirmation ID is: ", charge_id, " and payment amount is: ", charge_amount)
-        print("Redirecting to success...")
-        # TODO: Fix this broken redirect/render_template stuff, it's not working to redirect
-        #  the user to the /success page!
-        return render_template('success.html', charge_id=charge_id, charge_amount=charge_amount)
+    # if event["type"] == "payment_intent.succeeded":
+    #     payment_intent = event["data"]["object"]
+    #
+    #     # Some confirmations and needed values to be sent to the /success page (if it would work!)
+    #     charge_id = payment_intent.charges.data[0].id
+    #     charge_amount = payment_intent.charges.data[0].amount
+    #     print("Confirmation information -- confirmation ID is: ", charge_id, " and payment amount is: ",
+    #           (charge_amount / 100))
+    #     print("Redirecting to success...")
+    #     return render_template('success.html', charge_id=charge_id, charge_amount=charge_amount)
 
     return json.dumps({"success": True}), 200
+
+
+@app.route("/confirmation", methods=['POST', 'GET'])
+def confirm_payment():
+    intentid = request.args.get('paymentIntentId')
+    intent = stripe.PaymentIntent.retrieve(intentid)
+    print("Retrieving PaymentIntent object...")
+    # print(intentid)
+    charge_id = intent.charges.data[0].id
+    charge_amount = intent.charges.data[0].amount
+    print("Confirmation information -- confirmation ID is: ", charge_id, " and payment amount is: ",
+          (charge_amount / 100))
+
+    return render_template('success.html', charge_id=charge_id, charge_amount=(charge_amount / 100))
 
 
 if __name__ == '__main__':

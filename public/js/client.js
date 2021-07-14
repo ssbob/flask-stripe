@@ -3,6 +3,7 @@ var stripe = Stripe(
   "pk_test_51JBSdjD9g7lS7o0K1sI935d1u2MZcMbIThtoP3ivMXRt0zdn7jEnO3cbx2QF6JhYRMzio4RokBZY5b0MOCOu1U7800P4ukkdSr"
 );
 
+
 // The items the customer wants to buy
 //var amount = document.getElementById("data").getAttribute("value");
 
@@ -84,7 +85,7 @@ var payWithCard = function (stripe, card, clientSecret) {
       } else {
         // The payment succeeded!
         console.log("PayWithCard: Payment successful!");
-        orderComplete(result.paymentIntent.id);
+        orderComplete(result.paymentIntent.id, clientSecret);
       }
     });
 };
@@ -92,19 +93,21 @@ var payWithCard = function (stripe, card, clientSecret) {
 /* ------- UI helpers ------- */
 
 // Shows a success message when the payment is complete
-var orderComplete = function (paymentIntentId) {
+var orderComplete = function (paymentIntentId, paymentIntentClientSecret) {
   loading(false);
   document
-    .querySelector(".result-message a")
-    .setAttribute(
-      "href",
-      "https://dashboard.stripe.com/test/payments/" + paymentIntentId
-    );
+      .querySelector(".result-message a")
+      .setAttribute(
+          "href",
+          "https://dashboard.stripe.com/test/payments/" + paymentIntentId
+      );
   console.log("Order complete...");
   document.querySelector(".result-message").classList.remove("hidden");
   document.querySelector("button").disabled = true;
-  console.log("Redirecting to /success");
-  document.location.href = "http://localhost:5000/success";
+
+  let uri = "http://localhost:5000/confirmation?paymentIntentId="
+
+  document.location.href = uri + paymentIntentId;
 };
 
 // Show the customer the error from Stripe if their card fails to charge
