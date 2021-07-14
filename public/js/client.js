@@ -103,6 +103,8 @@ var orderComplete = function (paymentIntentId) {
   console.log("Order complete...");
   document.querySelector(".result-message").classList.remove("hidden");
   document.querySelector("button").disabled = true;
+  console.log("Redirecting to /success");
+  document.location.href = "http://localhost:5000/success";
 };
 
 // Show the customer the error from Stripe if their card fails to charge

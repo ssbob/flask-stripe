@@ -1,7 +1,8 @@
 import os
 
+import flask
 import stripe
-from flask import Flask, request, render_template, jsonify, redirect, url_for
+from flask import Flask, request, render_template, jsonify, redirect, url_for, json
 
 stripe.api_key = os.environ['STRIPE_SECRET_KEY']
 endpoint_secret = os.environ['STRIPE_ENDPOINT_SECRET']
@@ -46,6 +47,7 @@ def checkout():
 # Success route
 @app.route('/success', methods=['GET'])
 def success():
+    print("Sent to success.html, thanks!")
     return render_template('success.html')
 
 
@@ -86,11 +88,14 @@ def stripe_webhook():
         # Invalid signature
         return "Invalid signature", 400
 
-    # Handle the checkout.session.completed event
-    if event["type"] == "charge.succeeded":
-        print("Payment was successful.")
+    if event["type"] == "payment_intent.succeeded":
+        payment_intent = event["data"]["object"]
+        charge_id = payment_intent.charges.data[0].id
+        charge_amount = payment_intent.charges.data[0].amount
+        print("Redirecting to success...")
+        return render_template('success.html', charge_id=charge_id, charge_amount=charge_amount)
 
-    return redirect(url_for("success"), code=200)
+    return json.dumps({"success": True}), 200
 
 
 if __name__ == '__main__':
