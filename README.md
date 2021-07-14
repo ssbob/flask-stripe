@@ -39,6 +39,13 @@ against Flask, it just was something new I was learning while building this simp
 bit more. While I like the idea of a custom payment flow, Stripe Checkout makes a lot of sense, as it eases the burden
 of the developer and makes Stripe do the heavy lifting. I think I would probably go that route next time.
 
+## What doesn't work?
+
+Currently, when you click on buy on the checkout page, assuming you enter valid CC details, the purchase goes through (
+confirmed through Stripe webhook and on payment dashboard), but for some unknown reason (it will likely be obvious to
+someone) it will not redirect to the `/success` page/route. I have tried via JS, Flask/Python. At this point, it's a
+minor thing, but is bugging me. So, consider this a big TODO item.
+
 ## How do I use this?
 
 To get started, clone the repository and run pip3 to install dependencies:
