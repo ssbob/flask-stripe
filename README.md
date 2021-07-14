@@ -2,6 +2,19 @@
 
 This is a simple test integration with Stripe elements, and a custom payment flow, using Flask on Python for simplicity.
 
+## Useful links
+
+- [Stripe Payment Dashboard](https://dashboard.stripe.com/test/payments) - gotta make sure you get paid right?
+- [Stripe API Keys](https://dashboard.stripe.com/test/apikeys) - you need these often, make sure you put them in
+  your `.env` file for safe keeping.
+- [Stripe Integration Builder Docs](https://stripe.com/docs/payments/integration-builder) - this was critical in getting
+  the custom payment flow to work (mostly).
+- [Stripe Payment Intent API Docs](https://stripe.com/docs/api/payment_intents/object) - this is important to understand
+  the structure of the `PaymentIntent` object.
+- [Stripe Payment Charge API Docs](https://stripe.com/docs/api/charges/object) - needed to parse out the `Charge ID` for
+  confirmations.
+- [Stripe CLI Docs](https://stripe.com/docs/stripe-cli) - great reference for how to utilize the Stripe CLI.
+
 ## How does it work?
 
 This simple web-app uses some basic "store" concepts, like buying an item (a book in this case), and getting sent to a "

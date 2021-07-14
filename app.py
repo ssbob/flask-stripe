@@ -1,8 +1,7 @@
 import os
 
-import flask
 import stripe
-from flask import Flask, request, render_template, jsonify, redirect, url_for, json
+from flask import Flask, request, render_template, jsonify, json
 
 stripe.api_key = os.environ['STRIPE_SECRET_KEY']
 endpoint_secret = os.environ['STRIPE_ENDPOINT_SECRET']
@@ -90,9 +89,14 @@ def stripe_webhook():
 
     if event["type"] == "payment_intent.succeeded":
         payment_intent = event["data"]["object"]
+
+        # Some confirmations and needed values to be sent to the /success page (if it would work!)
         charge_id = payment_intent.charges.data[0].id
         charge_amount = payment_intent.charges.data[0].amount
+        print("Confirmation information -- confirmation ID is: ", charge_id, " and payment amount is: ", charge_amount)
         print("Redirecting to success...")
+        # TODO: Fix this broken redirect/render_template stuff, it's not working to redirect
+        #  the user to the /success page!
         return render_template('success.html', charge_id=charge_id, charge_amount=charge_amount)
 
     return json.dumps({"success": True}), 200
