@@ -96,11 +96,11 @@ var payWithCard = function (stripe, card, clientSecret) {
 var orderComplete = function (paymentIntentId, paymentIntentClientSecret) {
   loading(false);
   document
-      .querySelector(".result-message a")
-      .setAttribute(
-          "href",
-          "https://dashboard.stripe.com/test/payments/" + paymentIntentId
-      );
+    .querySelector(".result-message a")
+    .setAttribute(
+      "href",
+      "https://dashboard.stripe.com/test/payments/" + paymentIntentId
+    );
   console.log("Order complete...");
   document.querySelector(".result-message").classList.remove("hidden");
   document.querySelector("button").disabled = true;

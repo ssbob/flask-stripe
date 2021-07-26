@@ -1,21 +1,18 @@
-{% extends 'layouts/main.html' %}
-
-{% block content %}
-    <main>
-        <div class="mt-40 text-center text-success">
-            <h1>
-                <i class="far fa-check-circle"></i>
-                Success!
-            </h1>
-        </div>
-        <div class="mt-40 text-center">
-            <div class="mt-20 text-center text-secondary border-placeholder">
-                <p>
-                    Thank you for your payment!
-                    You paid: {{ charge_amount }} in USD
-                    Your payment confirmation number is: {{ charge_id }}
-                </p>
-            </div>
-        </div>
-    </main>
+{% extends 'layouts/main.html' %} {% block content %}
+<main>
+  <div class="mt-40 text-center text-success">
+    <h1>
+      <i class="far fa-check-circle"></i>
+      Success!
+    </h1>
+  </div>
+  <div class="mt-40 text-center">
+    <div class="mt-20 text-center text-secondary border-placeholder">
+      <p>
+        Thank you for your payment! You paid: {{ charge_amount }} in USD Your
+        payment confirmation number is: {{ charge_id }}
+      </p>
+    </div>
+  </div>
+</main>
 {% endblock %}
