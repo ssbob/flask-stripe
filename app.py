@@ -116,5 +116,19 @@ def confirm_payment():
     )
 
 
+@app.route("/charge_report", methods=["POST", "GET"])
+def get_charges():
+    # stripe.Charge.retrieve(
+    #     "ch_1JBh1KD9g7lS7o0Kop8aYNU9",
+    # )
+
+    charges = stripe.Charge.list()
+
+    # for x in charges:
+    #     print(charges[x].data.id)
+
+    return render_template("charges.html", charges=charges)
+
+
 if __name__ == "__main__":
     app.run(port=5000, host="0.0.0.0", debug=True)
